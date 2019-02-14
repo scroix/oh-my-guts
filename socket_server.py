@@ -28,22 +28,22 @@ class SocketServer:
             "We're currently running a good service @ %s:%s"
             % (config["ip_address"], config["port"]))
 
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(websockets.serve(
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+        self.loop.run_until_complete(websockets.serve(
             self.counter, config["ip_address"], config["port"]))
 
         if os.name == "nt":
-            loop.create_task(self.interrupt())
+            self.loop.create_task(self.interrupt())
 
         try:
-            loop.run_forever()
+            self.loop.run_forever()
         except KeyboardInterrupt:
             print("Goodbye ʕ·͡ᴥ·ʔ")
             pass
 
     def state_event(self):
-        return json.dumps({"type":"state", "state": self.state, "count": self.count})
+        return json.dumps({"type":"state", "state": self.state, "count": self.count[0]})
 
     def users_event(self):
         return json.dumps({"type":"users", "count": len(self.users)})
@@ -78,7 +78,6 @@ class SocketServer:
                     await websocket.send(self.state_event())
 
                 await asyncio.sleep(random.random())
-
         finally:
             await self.unregister(websocket)
 
