@@ -57,16 +57,13 @@
         <div class="minus button" id="4">-</div>
         <div class="minus button" id="5">-</div>
     </div>
-    <div class="container">
-        <div class="value button">?</div>
-    </div>
     <div class="state">
-        <span class="users">?</span> connected
+        <span class="sensors">?</span> active
     </div>
     <script>
         var container = document.getElementById('nodes').children,
             value = document.querySelector('.value'),
-            users = document.querySelector('.users'),
+            sensors = document.querySelector('.sensors'),
             websocket = new WebSocket("ws://127.0.0.1:6789/");
         websocket.onmessage = function (event) {
             data = JSON.parse(event.data);
@@ -89,11 +86,8 @@
                             };
                         };
                     }
-                    value.textContent = data.count;
-                    break;
-                case 'users':
-                    users.textContent = (
-                        data.count.toString() + " user" +
+                    sensors.textContent = (
+                        data.count.toString() + " sensor" +
                         (data.count == 1 ? "" : "s"));
                     break;
                 default:
