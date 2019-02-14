@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebSocket demo</title>
+    <style type="text/css">
+        body {
+            font-family: "Courier New", sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            font-size: 4em;
+            display: flex;
+            justify-content: center;
+        }
+
+        .button,
+        .value {
+            line-height: 1;
+            padding: 2rem;
+            margin: 2rem;
+            border: medium solid;
+            min-height: 1em;
+            min-width: 1em;
+        }
+
+        .button {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .minus {
+            color: red;
+        }
+
+        .plus {
+            color: green;
+        }
+
+        .value,
+        .label {
+            min-width: 5em;
+        }
+
+        .state {
+            font-size: 2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="nodes">
+        <div class="minus button" id="1">-</div>
+        <div class="minus button" id="2">-</div>
+        <div class="minus button" id="3">-</div>
+        <div class="minus button" id="4">-</div>
+        <div class="minus button" id="5">-</div>
+    </div>
+    <div class="container">
+        <div class="value button">?</div>
+    </div>
+    <div class="state">
+        <span class="users">?</span> connected
+    </div>
+    <script>
+        var container = document.getElementById('nodes').children,
+            value = document.querySelector('.value'),
+            users = document.querySelector('.users'),
+            websocket = new WebSocket("ws://127.0.0.1:6789/");
+        websocket.onmessage = function (event) {
+            data = JSON.parse(event.data);
+            switch (data.type) {
+                case 'state':
+                    console.log(data);
+                    for (var i = 0; i < container.length; i++) {
+                        if (data.state[i] == true) {
+                            if (container[i].classList.contains('plus') == false) {
+                                container[i].classList.remove('minus');
+                                container[i].classList.add('plus');
+                                container[i].textContent = '+'
+                            };
+                        }
+                        else if (data.state[i] == false) {
+                            if (container[i].classList.contains('minus') == false) {
+                                container[i].classList.remove('plus');
+                                container[i].classList.add('minus');
+                                container[i].textContent = '-'
+                            };
+                        };
+                    }
+                    value.textContent = data.count;
+                    break;
+                case 'users':
+                    users.textContent = (
+                        data.count.toString() + " user" +
+                        (data.count == 1 ? "" : "s"));
+                    break;
+                default:
+                    console.error(
+                        "unsupported event", data);
+            }
+        };
+    </script>
+</body>
+
+</html>
