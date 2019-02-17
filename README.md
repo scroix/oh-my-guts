@@ -8,3 +8,24 @@ Variation of now defunct 'oh-my-cv' people tracker, now turned capacitive sensin
 
 ## Run
 `python oh-my-guts.py`
+
+## Guide
+The socket server is accessible by default on 6789 and is configurable by `config.json`.
+
+In addition there is a Flask server launched on start-up on port 5000 (unconfigurable) indicating sensor status.
+
+A subscription to the websocket will provide updates on state changes in the following JSON form.
+
+``` json
+{
+  "type": "state",
+  "state": [
+    true,
+    true,
+    true,
+    false,
+    false
+  ],
+  "count": 3
+}
+```
