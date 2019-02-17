@@ -5,6 +5,8 @@ import logging
 import websockets
 import random
 from threading import Thread
+import socket
+
 
 
 class SocketServer:
@@ -12,23 +14,19 @@ class SocketServer:
     logging.basicConfig()
     users = set()
 
+    PORT = 6789
+
     def __init__(self, state, count):
         self.state = state
         self.count = count
 
-        config = json.loads(open("config.json").read())
-
         print("Hello (⌐■_■)")
-        print("Welcome to your socket server!")
-        print(
-            "We're currently running a good service @ %s:%s"
-            % (config["ip_address"], config["port"])
-        )
+        print("Welcome to your socket server, available on %s:%s" % (socket.gethostbyname(socket.gethostname()), self.PORT))
 
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
         self.loop.run_until_complete(
-            websockets.serve(self.counter, config["ip_address"], config["port"])
+            websockets.serve(self.counter, port=self.PORT)
         )
 
         if os.name == "nt":
