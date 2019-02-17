@@ -5,6 +5,7 @@ from threading import Thread
 from time import sleep
 import flask_server
 import socket_server
+import sys
 
 sensor_state = [False, False, False, False, False]
 sensor_count = [0]
@@ -42,7 +43,6 @@ def read_serial(device):
         if dummy_sensor_state != sensor_state:
             dummy_sensor_state = sensor_state.copy()
             sensor_count[0] = total_active_sensors()
-            #print(sensor_state)
         
 def total_active_sensors():
     value = 0
@@ -60,16 +60,38 @@ def run_socket_server():
 def run_flask_server():
     flask_server.FlaskServer()
 
+def useless_loading_bar():
+    # setup toolbar
+    toolbar_width = 40
+
+    sleep(0.05)
+
+    sys.stdout.write("[%s]" % (" " * toolbar_width))
+    sys.stdout.flush()
+    sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
+
+    for i in range(0, toolbar_width):
+        sleep(0.03) # do real work here
+        # update the bar
+        sys.stdout.write("-")
+        sys.stdout.flush()
+
+    sys.stdout.write("\n")
+
 t1 = Thread(target=run_socket_server, daemon=True)
 t2 = Thread(target=run_flask_server, daemon=True)
 
 t1.start()
+
+useless_loading_bar()
+
 t2.start()
 
 try:
     device = find_serial_device()
     if device:
-        print('Opening %s.' % device.description)
+        print('[----------------------------------------]')
+        print('Opening %s. ''ʕᵔᴥᵔʔ' % device.description)
         ser = serial.Serial(device.device, 9600, timeout=.1)
         #print_serial(device)
         read_serial(device)
