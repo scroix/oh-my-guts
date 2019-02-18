@@ -66,6 +66,8 @@ class SocketServer:
                     await websocket.send(self.state_event())
 
                 await asyncio.sleep(random.random())
+        except websockets.ConnectionClosed:
+            pass
         finally:
             await self.unregister(websocket)
 
