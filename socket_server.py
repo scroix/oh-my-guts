@@ -8,7 +8,6 @@ from threading import Thread
 import socket
 
 
-
 class SocketServer:
 
     logging.basicConfig()
@@ -21,13 +20,14 @@ class SocketServer:
         self.count = count
 
         print("Hello (⌐■_■)")
-        print("Welcome to your socket server, available on %s:%s" % (socket.gethostbyname(socket.gethostname()), self.PORT))
+        print(
+            "Welcome to your socket server, available on %s:%s"
+            % (socket.gethostbyname(socket.gethostname()), self.PORT)
+        )
 
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
-        self.loop.run_until_complete(
-            websockets.serve(self.counter, port=self.PORT)
-        )
+        self.loop.run_until_complete(websockets.serve(self.counter, port=self.PORT))
 
         if os.name == "nt":
             self.loop.create_task(self.interrupt())
