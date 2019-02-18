@@ -67,32 +67,30 @@
             websocket = new WebSocket("ws://127.0.0.1:6789/");
         websocket.onmessage = function (event) {
             data = JSON.parse(event.data);
-            switch (data.type) {
-                case 'state':
-                    console.log(data);
-                    for (var i = 0; i < container.length; i++) {
-                        if (data.state[i] == true) {
-                            if (container[i].classList.contains('plus') == false) {
-                                container[i].classList.remove('minus');
-                                container[i].classList.add('plus');
-                                container[i].textContent = '+'
-                            };
-                        }
-                        else if (data.state[i] == false) {
-                            if (container[i].classList.contains('minus') == false) {
-                                container[i].classList.remove('plus');
-                                container[i].classList.add('minus');
-                                container[i].textContent = '-'
-                            };
+            if (data.hasOwnProperty('state')) {
+                console.log(data);
+                for (var i = 0; i < container.length; i++) {
+                    if (data.state[i] == true) {
+                        if (container[i].classList.contains('plus') == false) {
+                            container[i].classList.remove('minus');
+                            container[i].classList.add('plus');
+                            container[i].textContent = '+'
                         };
                     }
-                    sensors.textContent = (
-                        data.count.toString() + " sensor" +
-                        (data.count == 1 ? "" : "s"));
-                    break;
-                default:
-                    console.error(
-                        "unsupported event", data);
+                    else if (data.state[i] == false) {
+                        if (container[i].classList.contains('minus') == false) {
+                            container[i].classList.remove('plus');
+                            container[i].classList.add('minus');
+                            container[i].textContent = '-'
+                        };
+                    };
+                }
+                sensors.textContent = (
+                    data.count.toString() + " sensor" +
+                    (data.count == 1 ? "" : "s"));
+            } else {
+                console.error(
+                    "unsupported event", data);
             }
         };
     </script>

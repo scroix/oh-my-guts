@@ -18,14 +18,13 @@ A subscription to the websocket will provide updates on state changes in the fol
 
 ``` json
 {
-  "type": "state",
   "state": [
-    true,
-    true,
+    false,
     true,
     false,
-    false
+    false,
+    true
   ],
-  "count": 3
+  "count": 2
 }
 ```

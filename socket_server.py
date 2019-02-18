@@ -28,7 +28,7 @@ class SocketServer:
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
         self.loop.run_until_complete(websockets.serve(self.counter, port=self.PORT))
-
+    
         if os.name == "nt":
             self.loop.create_task(self.interrupt())
 
@@ -40,7 +40,7 @@ class SocketServer:
 
     def state_event(self):
         return json.dumps(
-            {"type": "state", "state": self.state, "count": self.count[0]}
+            {"state": self.state, "count": self.count[0]}
         )
 
     async def notify_state(self):
