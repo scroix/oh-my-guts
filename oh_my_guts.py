@@ -3,9 +3,9 @@ import serial.tools.list_ports
 import warnings
 from threading import Thread
 from time import sleep
-import flask_server
-import socket_server
-import sys
+from servers.flask_server import FlaskServer
+from servers.socket_server import SocketServer
+
 
 sensor_state = [False, False, False, False, False]
 sensor_count = [0]
@@ -60,39 +60,12 @@ def to_boolean(val):
     return val != "0"
 
 
-def run_socket_server():
-    socket_server.SocketServer(sensor_state, sensor_count)
-
-
-def run_flask_server():
-    flask_server.FlaskServer()
-
-
-def useless_loading_bar():
-    # setup toolbar
-    toolbar_width = 40
-
-    sleep(0.05)
-
-    sys.stdout.write("[%s]" % (" " * toolbar_width))
-    sys.stdout.flush()
-    sys.stdout.write("\b" * (toolbar_width + 1))  # return to start of line, after '['
-
-    for i in range(0, toolbar_width):
-        sleep(0.03)  # do real work here
-        # update the bar
-        sys.stdout.write("-")
-        sys.stdout.flush()
-
-    sys.stdout.write("\n")
-
-
-t1 = Thread(target=run_socket_server, daemon=True)
-t2 = Thread(target=run_flask_server, daemon=True)
+t1 = Thread(target=lambda: SocketServer(sensor_state, sensor_count), daemon=True)
+t2 = Thread(target=lambda: FlaskServer(), daemon=True)
 
 t1.start()
 
-useless_loading_bar()
+print("[----------------------------------------]")
 
 t2.start()
 
