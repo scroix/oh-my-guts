@@ -1,6 +1,7 @@
 import serial
 import serial.tools.list_ports
 import warnings
+import argparse
 from threading import Thread
 from time import sleep
 from servers.flask_server import FlaskServer
@@ -26,20 +27,14 @@ def find_serial_device():
     return valid_ports[0]
 
 
-def print_serial(device):
-    sleep(1)
-    while True:
-        data = ser.readline().decode().strip()
-        if data:
-            print(data)
-
-
 def read_serial(device):
     sleep(1)
     dummy_sensor_state = sensor_state.copy()
     while True:
         data = ser.readline().decode().strip()
         if data:
+            if args["print"] == True:
+                print("Reading: [ %s ]" % data)
             for i in range(0, len(sensor_state)):
                 sensor_state[i] = to_boolean(data[i])
 
@@ -60,14 +55,22 @@ def to_boolean(val):
     return val != "0"
 
 
+ap = argparse.ArgumentParser()
+ap.add_argument(
+    "-p",
+    "--print",
+    help="print incoming messages from serial device",
+    action="store_true",
+)
+args = vars(ap.parse_args())
+
 t1 = Thread(target=lambda: SocketServer(sensor_state, sensor_count), daemon=True)
 t2 = Thread(target=lambda: FlaskServer(), daemon=True)
 
 t1.start()
-
 print("[----------------------------------------]")
-
 t2.start()
+
 
 try:
     device = find_serial_device()
@@ -75,7 +78,6 @@ try:
         print("[----------------------------------------]")
         print("Opening %s. " "ʕᵔᴥᵔʔ" % device.description)
         ser = serial.Serial(device.device, 9600, timeout=0.1)
-        # print_serial(device)
         read_serial(device)
     else:
         print("Exiting")

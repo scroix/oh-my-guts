@@ -9,15 +9,17 @@ Variation of now defunct 'oh-my-cv' people tracker, now turned capacitive sensin
 ## Run
 `python oh-my-guts.py`
 
+*Optionally include `-p` or `--print` flag to display output from serial device.*
+
 ## Guide
 Starts to read serial data from the first available USB Serial Device.
 
 Is expecting a stream of Strings representing the state of the sensors, 0=Off, 1=On.
 
-11100
-00011
-01001
-11100
+* 11100
+* 00011
+* 01001
+* 11100
 
 The socket server is accessible on 6789.
 
