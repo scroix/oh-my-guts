@@ -35,7 +35,7 @@ class SocketServer:
         try:
             self.loop.run_forever()
         except KeyboardInterrupt:
-            print("Goodbye ʕ·͡ᴥ·ʔ")
+            print("Goodbye.")
             pass
 
     def state_event(self):

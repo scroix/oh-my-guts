@@ -76,7 +76,7 @@ try:
     device = find_serial_device()
     if device:
         print("[----------------------------------------]")
-        print("Opening %s. " "ʕᵔᴥᵔʔ" % device.description)
+        print("Opening %s." % device.description)
         ser = serial.Serial(device.device, 9600, timeout=0.1)
         read_serial(device)
     else:
@@ -85,5 +85,5 @@ except KeyboardInterrupt:
     if ser:
         ser.close()
         print("Closing %s" % device.description)
-    print("Goodbye ʕ·͡ᴥ·ʔ")
+    print("Goodbye.")
     pass
