@@ -16,10 +16,10 @@ Starts to read serial data from the first available USB Serial Device.
 
 Is expecting a stream of Strings representing the state of the sensors, 0=Off, 1=On.
 
-* 11100
-* 00011
-* 01001
-* 11100
+* 1110000
+* 0001100
+* 0100100
+* 1110000
 
 The socket server is accessible on 6789.
 
@@ -34,7 +34,9 @@ A subscription to the websocket will provide updates on state changes in the fol
     true,
     false,
     false,
-    true
+    true,
+    false,
+    false
   ],
   "count": 2
 }

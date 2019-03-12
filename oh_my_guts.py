@@ -8,7 +8,7 @@ from servers.flask_server import FlaskServer
 from servers.socket_server import SocketServer
 
 
-sensor_state = [False, False, False, False, False]
+sensor_state = [False, False, False, False, False, False, False]
 sensor_count = [0]
 
 

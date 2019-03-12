@@ -78,4 +78,4 @@ class SocketServer:
 
 if __name__ == "__main__":
     print("You're running solo. This is intended to be ran as part of a package.")
-    main = SocketServer([True, False, True, False, True], 0)
+    main = SocketServer([True, False, True, False, True, False, False], 0)
