@@ -3,7 +3,6 @@ import asyncio
 import json
 import logging
 import websockets
-import random
 from threading import Thread
 import socket
 
@@ -65,7 +64,7 @@ class SocketServer:
                     dummy_state = self.state.copy()
                     await websocket.send(self.state_event())
 
-                await asyncio.sleep(random.random())
+                await asyncio.sleep(0.1)
         except websockets.ConnectionClosed:
             pass
         finally:
